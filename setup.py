@@ -17,7 +17,7 @@ CLASSIFIERS = [
     'License :: OSI Approved :: MIT License',
 ]
 
-DEPENDENCIES = []
+DEPENDENCIES = ['Jinja2']
 
 setup(
     name='apim_tf_export',
@@ -30,5 +30,6 @@ setup(
     url='https://github.com/stuartleeks/apim_tf_export',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
+	package_data={'azext_apim_tf_export': ['templates/*.*']},
     install_requires=DEPENDENCIES
 )

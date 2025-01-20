@@ -1,3 +1,5 @@
 build
 dist
 apim_tf_export.egg-info
+**/__pycache__
+test-output
