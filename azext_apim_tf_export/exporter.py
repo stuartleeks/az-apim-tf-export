@@ -179,6 +179,10 @@ terraform {
                 continue
             print(f"  Environments: {api_environments}")
 
+            if api.api_revision != "1":
+                print("!! This API uses revisions which are not currently supported - exiting")
+                exit(-1)
+
             if api.api_version_set_id:
                 # merge the environments from the API and the API Version Set
                 api_version_set_environments = api_version_set_environment_map.get(
