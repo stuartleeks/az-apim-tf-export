@@ -1,0 +1,18 @@
+{
+	"apis": {
+		"my-api-1": {
+			"environments" : ["env2"]
+		},
+		"my-api-2": {
+			"environments" : ["env2", "env3"]
+		},
+		"other-api-*" : {
+			"environments" : ["env2", "env3"]
+		}
+	},
+	"products": {
+		"my-product" : {
+			"environments" : ["env2", "env3"]
+		}
+	}
+}

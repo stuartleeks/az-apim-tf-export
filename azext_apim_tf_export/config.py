@@ -11,8 +11,8 @@ class ProductConfig(TypedDict):
     environments: List[str]
 
 class Config(TypedDict):
-    apis: List[ApiConfig]
-    products: List[ProductConfig]
+    apis: dict[str, ApiConfig]
+    products: dict[str, ProductConfig]
 
 def load_config(config_path: str) -> Config:
     if config_path.endswith('.json'):
