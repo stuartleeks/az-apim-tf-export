@@ -27,7 +27,7 @@ setup(
     license='MIT',
     author='',
     author_email='stuartle@microsoft.com',
-    url='https://github.com/stuartleeks/apim_tf_export',
+    url='https://github.com/stuartleeks/az-apim-tf-export',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
 	package_data={'azext_apim_tf_export': ['templates/*.*']},

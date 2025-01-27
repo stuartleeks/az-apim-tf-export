@@ -1,6 +1,6 @@
 # az-apim-tf-export
 
-**NOTE: This extension is experimental and not supported by Microsoft.**
+**NOTE: This extension is experimental and not supported**
 
 This repository contains an extension for the Azure CLI (`az`) that allows exporting API and Product configuration from Azure API Management to Terraform configuration files.
 
