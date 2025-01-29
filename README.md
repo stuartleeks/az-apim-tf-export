@@ -9,15 +9,40 @@ This allows you to work in a development deployment of APIM and then export the 
 If you are not using Terraform (or don't want to manage your API Management configuration in Terraform), you might be interested in the [APIOps](https://github.com/Azure/apiops) project instead.
 
 - [az-apim-tf-export](#az-apim-tf-export)
-	- [How it works](#how-it-works)
-	- [Limitations](#limitations)
 	- [Installation](#installation)
 	- [Usage](#usage)
+	- [How it works](#how-it-works)
+	- [Limitations](#limitations)
 	- [Config file](#config-file)
 		- [JSON](#json)
 		- [YAML](#yaml)
 		- [Default config](#default-config)
 
+
+## Installation
+
+Currently there is no package published for this extension so you will need to build it yourself.
+
+To build the extension, run `make build-wheel` from the root of the project repo.
+The repo contains a VS Code dev container that has all the required dependencies installed.
+
+After building the extension, you can install it using `make add-extension`.
+If you want to install the extension in a different environment after building then run `az extension add --source <path to wheel file>`.
+
+## Usage
+
+After installing the extension, you can use the `az apim export-to-terraform` command to export the configuration of an APIs and Products.
+Note that the extension uses the `az` CLI to authenticate so you will need to be logged in to the Azure CLI before running the command.
+
+The command has the following parameters:
+
+| Name                    | Description                                                                                                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--resource-group`/`-g` | [Required] The name of the resource group that contains the APIM service.                                                                                                  |
+| `--service-name`        | [Required] The name of the APIM service.                                                                                                                                   |
+| `--output-folder`       | [Required] The folder to export the configuration to, typically a dedicated subfolder of your Terraform project. **IMPORTANT** all content in this folder will be deleted. |
+| `--config`              | [Optional] The path to a [config file](#config-file) to control the export. If not specified, the [default configuration](#default-config) will be used.                            |
+| `--yes`/`-y`            | [Optional] Bypass the confirmation prompt.                                                                                                                                 |
 
 ## How it works
 
@@ -63,23 +88,7 @@ Future versions of the extension may support exporting additional resources, suc
 - Product Groups
 - Product Tags
 
-## Installation
 
-TODO
-
-## Usage
-
-After installing the extension, you can use the `az apim export-to-terraform` command to export the configuration of an APIs and Products.
-
-The command has the following parameters:
-
-| Name                    | Description                                                                                                                                                                |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--resource-group`/`-g` | [Required] The name of the resource group that contains the APIM service.                                                                                                  |
-| `--service-name`        | [Required] The name of the APIM service.                                                                                                                                   |
-| `--output-folder`       | [Required] The folder to export the configuration to, typically a dedicated subfolder of your Terraform project. **IMPORTANT** all content in this folder will be deleted. |
-| `--config`              | [Optional] The path to a [config file](#config-file) to control the export. If not specified, the [default configuration](#default-config) will be used.                            |
-| `--yes`/`-y`            | [Optional] Bypass the confirmation prompt.                                                                                                                                 |
 
 ## Config file
 
