@@ -24,7 +24,7 @@ def export_to_terraform(
     print('** NOTE: this extension is experimental, not supported, and may not work as expected! **')
 
     msg = 'WARNING: This will delete the output folder and all its contents. Are you sure you want to continue? (y/n)'
-    if not yes and not prompt_y_n():
+    if not yes and not prompt_y_n(msg):
         return None
     
     print('Exporting API Management configuration to Terraform...')
