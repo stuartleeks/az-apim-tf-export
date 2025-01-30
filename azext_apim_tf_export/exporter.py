@@ -91,6 +91,25 @@ variable "environment" {
   description = "The environment for which the resources are being deployed"
 }
 """)
+            
+        with open(os.path.join(self.output_folder, "versions.tf"), "w") as f:
+            f.write("""
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>3.70"
+      # configuration_aliases = [azurerm.key_vault]
+    }
+    azapi = {
+      source  = "Azure/azapi"
+      version = ">=1.13.1"
+    }
+  }
+
+  required_version = ">= 1.8"
+}
+""")
 
     def _export_products(self):
         """
@@ -123,8 +142,7 @@ variable "environment" {
             for product_api in all_product_apis:
                 api_short_id = last_segment(product_api.id)
                 api_environments = self._get_environments_for_api(api_short_id)
-                product_api_environments = list(
-                    set(product_environments) & set(api_environments or []))
+                product_api_environments = list(set(product_environments) & set(api_environments or []))
                 if api_environments:
                     product_apis[product_api.id] = product_api_environments
 
@@ -162,8 +180,7 @@ variable "environment" {
             print(f"  Environments: {api_environments}")
 
             if api.api_revision != "1":
-                print(
-                    "!! This API uses revisions which are not currently supported - exiting")
+                print("!! This API uses revisions which are not currently supported - exiting")
                 exit(-1)
 
             if api.api_version_set_id:
