@@ -98,7 +98,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.70"
+      version = "~>4.0"
       # configuration_aliases = [azurerm.key_vault]
     }
     azapi = {

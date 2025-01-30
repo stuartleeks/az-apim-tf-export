@@ -18,6 +18,9 @@ These values will be used by the Terraform deployment when creating the environm
 Run the following commands to create the `dev` and `test` environments:
 
 ```bash
+# Run terraform init
+make terraform-init
+
 # Deploy a "dev" environment
 make deploy-dev
 
@@ -82,6 +85,9 @@ To do this, find the commented out section for the `apim-generated` module in `m
 Now that the Terraform code includes the generated module with the API/Product configuration, you can apply the configuration to the `test` environment:
 
 ```bash
+# Re-run terraform init to set up new module
+make terraform-init
+
 # Re-run the deployment for the "test" environment
 make deploy-test
 ```
