@@ -13,6 +13,7 @@ If you are not using Terraform (or don't want to manage your API Management conf
 	- [Usage](#usage)
 	- [How it works](#how-it-works)
 	- [Limitations](#limitations)
+	- [Handling differences in environments](#handling-differences-in-environments)
 	- [Config file](#config-file)
 		- [JSON](#json)
 		- [YAML](#yaml)
@@ -34,6 +35,8 @@ If you want to install the extension in a different environment after building t
 After installing the extension, you can use the `az apim export-to-terraform` command to export the configuration of an APIs and Products.
 Note that the extension uses the `az` CLI to authenticate so you will need to be logged in to the Azure CLI before running the command.
 
+For a guided tour of using the extension see the [walkthrough](docs/walkthrough.md) included in the repo.
+
 The command has the following parameters:
 
 | Name                    | Description                                                                                                                                                                |
@@ -41,7 +44,7 @@ The command has the following parameters:
 | `--resource-group`/`-g` | [Required] The name of the resource group that contains the APIM service.                                                                                                  |
 | `--service-name`        | [Required] The name of the APIM service.                                                                                                                                   |
 | `--output-folder`       | [Required] The folder to export the configuration to, typically a dedicated subfolder of your Terraform project. **IMPORTANT** all content in this folder will be deleted. |
-| `--config`              | [Optional] The path to a [config file](#config-file) to control the export. If not specified, the [default configuration](#default-config) will be used.                            |
+| `--config`              | [Optional] The path to a [config file](#config-file) to control the export. If not specified, the [default configuration](#default-config) will be used.                   |
 | `--yes`/`-y`            | [Optional] Bypass the confirmation prompt.                                                                                                                                 |
 
 ## How it works
@@ -88,6 +91,36 @@ Future versions of the extension may support exporting additional resources, suc
 - Product Groups
 - Product Tags
 
+## Handling differences in environments
+
+When running the export script, the API and Product definitions are exported to Terraform and then applied to other environments.
+This means that the same API configuration is applied to all environments.
+However, there are some aspects of the API behaviour that needs to change across environments.
+A common example is the base URL for an API.
+A simple way to manage this is to set up named backends in APIM (via Terraform) and then use the `set-backend-service` policy to set the backend for an API to a configured named backend (keeping the name consistent across environments):
+
+```xml
+<!-- example policy snippet -->
+<inbound>
+    <set-backend-service backend-id="openai" />
+    <base />
+</inbound>
+```
+
+If there are other values that need to vary in API policies, APIM named values can be used.
+For example, if you are using the `validate-jwt` policy you may wish to vary the EntraID tenant and audience values across environments.
+To do this, you could use Terraform to set up named values for `aad_tenant` and `aad_scope` and then reference these in the policy:
+
+```xml
+<validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Not authorized">
+    <openid-config url="https://login.microsoftonline.com/{{aad_tenant}}/.well-known/openid-configuration" />
+    <required-claims>
+        <claim name="aud" match="all">
+            <value>{{aad_scope}}</value>
+        </claim>
+    </required-claims>
+</validate-jwt>
+```
 
 
 ## Config file

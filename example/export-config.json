@@ -1,0 +1,12 @@
+{
+	"apis": {
+		"*": {
+			"environments" : ["test"]
+		}
+	},
+	"products": {
+		"*" : {
+			"environments" : ["test"]
+		}
+	}
+}

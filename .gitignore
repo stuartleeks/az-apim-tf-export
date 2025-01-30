@@ -3,3 +3,13 @@ dist
 apim_tf_export.egg-info
 **/__pycache__
 test-output
+
+.terraform
+
+.env
+
+*.tfstate
+*.tfstate.backup
+
+
+apim-generated
