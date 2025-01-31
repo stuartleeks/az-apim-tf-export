@@ -1,0 +1,57 @@
+name: release
+
+#
+# NOTE TO SELF: Ensure that the version in setup.py is updated prior to making a release
+# ALSO:         After making the release, update the README install steps to reference the new version
+#
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write # write needed to create a release
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build extension
+      id: build
+      uses: devcontainers/ci@v0.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        imageName: ghcr.io/stuartleeks/az-apim-tf-export-devcontainer
+        cacheFrom: ghcr.io/stuartleeks/az-apim-tf-export-devcontainer
+        runCmd: |
+          make build-wheel
+          VERSION=$(sed -nE  "s/VERSION = \"(.*)\"/\1/p" setup.py)
+          echo "VERSION: $VERSION"
+          echo "::set-output name=version::$VERSION"
+        env: |
+          GITHUB_TOKEN
+          IS_CI=1
+      
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheel.zip
+        path: dist/*.whl
+        if-no-files-found: error
+
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: dist/*.whl
+        name: Release ${{ steps.build.outputs.version }}
+        tag: v${{ steps.build.outputs.version }}
