@@ -5,7 +5,7 @@ This document provides a walkthrough of using the `az-apim-tf-export` extension 
 The walkthrough works with two environments: `dev` and `test`.
 Terraform will be used to create the infrastructure for both environments.
 The `dev` environment will be used to author the APIs in APIM.
-Then the  and the configuration will be exported to Terraform and applied to the `test` environment.
+Then the configuration will be exported to Terraform and applied to the `test` environment.
 
 ## Step 1: Set up the `.env` file
 
@@ -74,7 +74,7 @@ API: test-api
 
 Once the export is complete, you will see a new folder called `apim-generated` in the `example` folder.
 This folder will have a Terraform file for each API and Product that was exported.
-Additionally, there are `apis` and `products` folders that container any schemas and policies that were exported.
+Additionally, there are `apis` and `products` folders that contain any schemas and policies that were exported.
 
 Now that the configuration has been exported to the `apim-generated` Terraform module you can include it in the Terraform code.
 To do this, find the commented out section for the `apim-generated` module in `main.tf` file and uncomment it.
@@ -109,8 +109,3 @@ The export configuration for the walkthrough is in the `example/export-config.js
 This file tells the export to include all APIs and Products and deploy them to the `test` environment.
 If you have more environments or want to include/exclude specific APIs/Products, you can update this file accordingly.
 See the [README](../README.md) for more information on the configuration file.
-
-
-
-
-
